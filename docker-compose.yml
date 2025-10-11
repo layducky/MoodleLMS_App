@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   moodle:
-    image: bitnami/moodle:latest
+    image: bitnamilegacy/moodle:latest
     container_name: moodle
     restart: always
     ports:
