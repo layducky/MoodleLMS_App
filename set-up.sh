@@ -18,11 +18,14 @@ else
     echo "✅ kubectl already installed."
 fi
 
-# 1. Check Minikube cluster status
+# 1. Check if Minikube is installed
 if ! command -v minikube &> /dev/null; then
-    echo "Minikube not found. Please install Minikube first:"
-    echo "  https://minikube.sigs.k8s.io/docs/start/"
-    exit 1
+    echo "🔧 Minikube not found. Installing..."
+    curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+    sudo install minikube-linux-amd64 /usr/local/bin/minikube && rm minikube-linux-amd64
+    echo "✅ Minikube installed successfully."
+else
+    echo "✅ Minikube already installed."
 fi
 
 if ! minikube status >/dev/null 2>&1; then
