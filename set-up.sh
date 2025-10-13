@@ -30,8 +30,7 @@ fi
 
 if ! minikube status >/dev/null 2>&1; then
     echo "Minikube is not running. Creating and starting cluster..."
-    minikube start --driver=docker --cpus=1 --memory=2048 --profile $CLUSTER_NAME
-
+    minikube start --driver=docker --profile $CLUSTER_NAME
 else
     echo "✅ Minikube is running, profile: $CLUSTER_NAME"
 fi
@@ -42,7 +41,7 @@ kubectl config set-context --current --namespace=$NAMESPACE
 
 # 3. Delete existing resources
 echo "🧹 Deleting existing resources if any..."
-FILES=("3_moodle.yaml" "2_psql_db.yaml" "1_moodle_pvc.yaml" "0_secret.yaml")
+FILES=("4_moodle_ingress.yaml" "3_moodle.yaml" "2_psql_db.yaml" "1_moodle_pvc.yaml" "0_secret.yaml")
 
 for f in "${FILES[@]}"; do
     if [ -f "$f" ]; then
@@ -52,7 +51,7 @@ done
 
 # 4. Deploy new resources in correct order
 echo "🚀 Deploying new resources..."
-for f in "0_secret.yaml" "1_moodle_pvc.yaml" "2_psql_db.yaml" "3_moodle.yaml"; do
+for f in "0_secret.yaml" "1_moodle_pvc.yaml" "2_psql_db.yaml" "3_moodle.yaml" "4_moodle_ingress.yaml"; do
     if [ -f "$f" ]; then
         kubectl apply -f "$f"
     fi

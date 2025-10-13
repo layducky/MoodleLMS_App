@@ -17,6 +17,7 @@ spec:
       containers:
         - name: moodle
           image: bitnamilegacy/moodle:latest
+          imagePullPolicy: IfNotPresent
           env:
             - name: MOODLE_USERNAME
               value: "admin"
@@ -60,7 +61,7 @@ metadata:
   name: moodle
   namespace: moodle
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - name: http
       port: 80
