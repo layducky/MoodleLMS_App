@@ -30,7 +30,8 @@ fi
 
 if ! minikube status >/dev/null 2>&1; then
     echo "Minikube is not running. Creating and starting cluster..."
-    minikube start --driver=docker --profile $CLUSTER_NAME
+    minikube start --driver=docker --cpus=1 --memory=2048 --profile $CLUSTER_NAME
+
 else
     echo "✅ Minikube is running, profile: $CLUSTER_NAME"
 fi
