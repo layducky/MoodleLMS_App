@@ -1,0 +1,72 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: moodle
+  namespace: moodle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: moodle
+  template:
+    metadata:
+      labels:
+        app: moodle
+    spec:
+      containers:
+        - name: moodle
+          image: bitnamilegacy/moodle:latest
+          env:
+            - name: MOODLE_USERNAME
+              value: "admin"
+            - name: MOODLE_PASSWORD
+              value: "admin123"
+            - name: MOODLE_EMAIL
+              value: "admin@example.com"
+            - name: MOODLE_SITE_NAME
+              value: "Devops HCMUT LMS"
+            - name: MOODLE_DATABASE_TYPE
+              value: "pgsql"
+            - name: MOODLE_DATABASE_HOST
+              value: "postgres"
+            - name: MOODLE_DATABASE_PORT_NUMBER
+              value: "5432"
+            - name: MOODLE_DATABASE_USER
+              value: "bn_moodle"
+            - name: MOODLE_DATABASE_PASSWORD
+              value: "moodlepass"
+            - name: MOODLE_DATABASE_NAME
+              value: "bitnami_moodle"
+          ports:
+            - containerPort: 8080
+            - containerPort: 8443
+          volumeMounts:
+            - mountPath: /bitnami/moodle
+              name: moodle-storage
+            - mountPath: /bitnami/moodledata
+              name: moodledata-storage
+      volumes:
+        - name: moodle-storage
+          persistentVolumeClaim:
+            claimName: moodle-pvc
+        - name: moodledata-storage
+          persistentVolumeClaim:
+            claimName: moodledata-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: moodle
+  namespace: moodle
+spec:
+  type: LoadBalancer
+  ports:
+    - name: http
+      port: 80
+      targetPort: 8080
+    - name: https
+      port: 443
+      targetPort: 8443
+  selector:
+    app: moodle

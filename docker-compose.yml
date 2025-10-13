@@ -12,7 +12,7 @@ services:
       - MOODLE_USERNAME=admin
       - MOODLE_PASSWORD=admin123
       - MOODLE_EMAIL=admin@example.com
-      - MOODLE_SITE_NAME="My Moodle"
+      - MOODLE_SITE_NAME="Devops HCMUT LMS"
       - MOODLE_DATABASE_TYPE=pgsql
       - MOODLE_DATABASE_HOST=postgres
       - MOODLE_DATABASE_PORT_NUMBER=5432

@@ -1,0 +1,48 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: postgres
+  namespace: moodle
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: bitnami/postgresql:latest
+          env:
+            - name: POSTGRESQL_USERNAME
+              value: "bn_moodle"
+            - name: POSTGRESQL_PASSWORD
+              value: "moodlepass"
+            - name: POSTGRESQL_DATABASE
+              value: "bitnami_moodle"
+          ports:
+            - containerPort: 5432
+          volumeMounts:
+            - mountPath: /bitnami/postgresql
+              name: postgres-storage
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+  namespace: moodle
+spec:
+  type: ClusterIP
+  ports:
+    - port: 5432
+      targetPort: 5432
+  selector:
+    app: postgres
